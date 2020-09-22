@@ -52,17 +52,42 @@ provider:
       Resource: "arn:aws:s3:::*"
 
 functions:
-  hello:
-    handler: handler.hello
+  createUser:
+    handler: handlersUser/createUser.main
+    # events:
+    #   - cognitoUserPool:
+    #       pool: blob-images-users
+    #       trigger: PostConfirmation
+    #       existing: true
+  getUser:
+    handler: handlersUser/getUser.main
     events:
       - http:
-          path: hello
+          path: /
           method: get
+          cors: true
+          authorizer: aws_iam
+  updateUser:
+    handler: handlersUser/updateUser.main
+    events:
+      - http:
+          path: /
+          method: put
+          cors: true
+          authorizer: aws_iam
+  listUserAlbums:
+    handler: handlersUser/listAllAlbums.main
+    events:
+      - http:
+          path: /albums
+          method: get
+          cors: true
+          authorizer: aws_iam
 
 custom:
   customDomain:
     domainName: 'api.clubalmanac.com'
-    basePath: 'invites'
+    basePath: 'user'
     stage: ${self:provider.stage}
     createRoute53Record: false
 
