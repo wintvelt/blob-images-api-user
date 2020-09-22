@@ -1,0 +1,71 @@
+# NOTE: update this with your service name
+service: blob-images-api-user
+
+# Create an optimized package for our functions 
+package:
+  individually: true
+
+plugins:
+  - serverless-bundle # Package our functions with Webpack
+  - serverless-offline
+  - serverless-dotenv-plugin # Load .env as environment variables
+  - serverless-domain-manager
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  stage: prod
+  region: eu-central-1
+
+  environment:
+    photoTable: blob-images-photos
+    coverIndex: cover-idx
+    photoIndex: SK-PK-idx
+    emailIndex: email-idx
+    cognitoIndex: cog-idx
+    dateIndex: date-idx
+    photoBucket: blob-images
+
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:DescribeTable
+        - dynamodb:Query
+        - dynamodb:Scan
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        - dynamodb:UpdateItem
+        - dynamodb:DeleteItem
+        - dynamodb:DescribeStream
+        - dynamodb:ListStreams
+      Resource: "arn:aws:dynamodb:eu-central-1:*:*"
+    - Effect: Allow
+      Action:
+        - ses:SendEmail
+        - ses:SendRawEmail
+        - ses:SendTemplatedEmail
+        - ses:SendBulkTemplatedEmail
+      Resource: "arn:aws:ses:eu-central-1:*:*"
+    - Effect: Allow
+      Action:
+        - s3:getObject
+      Resource: "arn:aws:s3:::*"
+
+functions:
+  hello:
+    handler: handler.hello
+    events:
+      - http:
+          path: hello
+          method: get
+
+custom:
+  customDomain:
+    domainName: 'api.clubalmanac.com'
+    basePath: 'invites'
+    stage: ${self:provider.stage}
+    createRoute53Record: false
+
+resources:
+  # API Gateway Errors
+  - ${file(resources/api-gateway-errors.yml)}
