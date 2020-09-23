@@ -2,7 +2,6 @@ import { dynamoDb } from 'blob-common/core/db';
 
 export const listGroupAlbums = async (groupId, groupRole) => {
     const params = {
-        TableName: process.env.photoTable,
         KeyConditionExpression: "#g = :g",
         ExpressionAttributeNames: {
             '#g': 'PK',

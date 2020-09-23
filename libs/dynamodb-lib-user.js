@@ -8,7 +8,6 @@ export const getLoginUser = async (userId, cognitoId) => {
     };
 
     const result = await dynamoDb.get({
-        TableName: process.env.photoTable,
         Key
     });
     const oldUser = result.Item;

@@ -20,7 +20,7 @@ provider:
     APP: clubalmanac
 
   environment:
-    photoTable: blob-images-photos-${self:provider.stage}
+    photoTable: ${file(./serverlessDomainConfig.js):photoTable.${self:provider.stage}}
     coverIndex: cover-idx
     photoIndex: SK-PK-idx
     emailIndex: email-idx
