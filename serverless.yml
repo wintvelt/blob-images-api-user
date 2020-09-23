@@ -16,6 +16,8 @@ provider:
   runtime: nodejs12.x
   stage: ${opt:stage, 'dev'}
   region: eu-central-1
+  tags:
+    APP: clubalmanac
 
   environment:
     photoTable: blob-images-photos-${self:provider.stage}
@@ -83,13 +85,19 @@ functions:
           method: get
           cors: true
           authorizer: aws_iam
+  dummy:
+    handler: handlersUser/dummy.main
+    events:
+      - http:
+          path: /dummy
+          method: get
 
 custom:
   customDomain:
-    domainName: 'api.clubalmanac.com'
+    domainName: ${file(./serverlessDomainConfig.js):domain.${self:provider.stage}}
     basePath: 'user'
     stage: ${self:provider.stage}
-    createRoute53Record: false
+    createRoute53Record: true
 
 resources:
   # API Gateway Errors
