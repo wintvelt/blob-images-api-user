@@ -1,5 +1,6 @@
 import { dynamoDb, dbUpdateMulti } from 'blob-common/core/db';
 import { now } from 'blob-common/core/date';
+import { dbItem } from 'blob-common/core/dbCreate';
 
 export const getLoginUser = async (userId, cognitoId) => {
     const Key = {
@@ -15,14 +16,16 @@ export const getLoginUser = async (userId, cognitoId) => {
         throw new Error("User not found.");
     }
     const today = now();
-    const newVisitDatePrev = oldUser.visitDateLast || today;
+    const isFirstVisit = !oldUser.visitDateLast;
     const isNewVisit = (!oldUser.visitDateLast || today > oldUser.visitDateLast);
     const hasNoCognitoId = !oldUser.cognitoId;
+
+    const newVisitDatePrev = oldUser.visitDateLast || today;
     const visitDateUpdate = (isNewVisit) ?
         { visitDateLast: today, visitDatePrev: newVisitDatePrev }
         : {};
     const visitUpdate = (hasNoCognitoId) ? { ...visitDateUpdate, cognitoId } : visitDateUpdate;
-    if (isNewVisit || hasNoCognitoId) await dbUpdateMulti('UVvisit', Key.SK, visitUpdate);
+    if (isNewVisit || hasNoCognitoId) await dbUpdateMulti('UVvisit', Key.SK, (isFirstVisit)? dbItem(visitUpdate) : visitUpdate);
     return {
         ...oldUser,
         ...visitUpdate

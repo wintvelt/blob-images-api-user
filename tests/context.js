@@ -3,6 +3,7 @@ import { dbCreateItem } from 'blob-common/core/dbCreate';
 
 const testUserCognitoId = 'eu-central:123456';
 export const testUserId = 'U' + '123normal-test-id123';
+export const testUserId2 = 'U' + '123test-user2';
 export const testGroupId = 'Gtestgroup-1';
 export const testAlbumId = 'Atestalbum-1';
 export const testPhotoId = 'Ptestphoto-1';
