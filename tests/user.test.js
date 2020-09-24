@@ -11,7 +11,7 @@ import { main as updateUser } from '../handlersUser/updateUser';
 const TIMEOUT = 2000;
 const today = now();
 // INITIAL SETUP
-// test('Create 2 users', async () => {
+// test.only('Create 2 users', async () => {
 //     const request = {
 //         userName: testUser.email,
 //         userAttributes: {
@@ -36,7 +36,7 @@ const today = now();
 //     expect(response2.statusCode).toEqual(200);
 // });
 
-test('Get user', async () => {
+test.only('Get user', async () => {
     await sleep(TIMEOUT);
     const event = eventContext({
         pathParameters: { id: testUserId }

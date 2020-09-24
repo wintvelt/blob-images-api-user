@@ -1,6 +1,6 @@
 import { dynamoDb, dbUpdateMulti } from 'blob-common/core/db';
 import { now } from 'blob-common/core/date';
-import { dbItem } from 'blob-common/core/dbCreate';
+import { dbCreateItem } from 'blob-common/core/dbCreate';
 
 export const getLoginUser = async (userId, cognitoId) => {
     const Key = {
@@ -25,7 +25,14 @@ export const getLoginUser = async (userId, cognitoId) => {
         { visitDateLast: today, visitDatePrev: newVisitDatePrev }
         : {};
     const visitUpdate = (hasNoCognitoId) ? { ...visitDateUpdate, cognitoId } : visitDateUpdate;
-    if (isNewVisit || hasNoCognitoId) await dbUpdateMulti('UVvisit', Key.SK, (isFirstVisit)? dbItem(visitUpdate) : visitUpdate);
+    if (isFirstVisit) {
+        await dbCreateItem({
+            PK: 'UVvisit', SK: Key.SK,
+            ...visitUpdate
+        });
+    } else if (isNewVisit || hasNoCognitoId) {
+        await dbUpdateMulti('UVvisit', Key.SK, visitUpdate);
+    }
     return {
         ...oldUser,
         ...visitUpdate
