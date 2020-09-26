@@ -25,7 +25,6 @@ export const main = handler(async (event, context) => {
         }
     } else if (data.filename) {
         const photoUrl = `protected/${event.requestContext.identity.cognitoIdentityId}/${data.filename}`;
-        console.log(photoUrl);
         const photoFound = await getPhotoByUrl(photoUrl, userId);
         if (photoFound) {
             userUpdate.photoUrl = photoFound.url;
