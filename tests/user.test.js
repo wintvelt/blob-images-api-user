@@ -36,22 +36,36 @@ const today = now();
 //     expect(response2.statusCode).toEqual(200);
 // });
 
-test.only('Get user', async () => {
-    await sleep(TIMEOUT);
-    const event = eventContext({
-        pathParameters: { id: testUserId }
-    });
-    const response = await getUser(event);
-    const user = JSON.parse(response.body);
-    expect(response.statusCode).toEqual(200);
-    expect(user?.visitDateLast).toBe(today);
-}, TIMEOUT + 5000);
+// test('Get user', async () => {
+//     await sleep(TIMEOUT);
+//     const event = eventContext({
+//         pathParameters: { id: testUserId }
+//     });
+//     const response = await getUser(event);
+//     const user = JSON.parse(response.body);
+//     expect(response.statusCode).toEqual(200);
+//     expect(user?.visitDateLast).toBe(today);
+// }, TIMEOUT + 5000);
 
 describe('Change user', () => {
-    test('Change username', async () => {
-        const event = eventContext({ body: { name: 'Wim' } });
+    // test('Change username', async () => {
+    //     const event = eventContext({ body: { name: 'Wim' } });
+    //     const response = await updateUser(event);
+    //     expect(response.statusCode).toEqual(200);
+    // });
+    // test('Add photo cover to user by photo id', async () => {
+    //     const event = eventContext({ body: { photoId: 'P6UbocnbQdjqiQMZ' } });
+    //     const response = await updateUser(event);
+    //     expect(response.statusCode).toEqual(200);
+    // });
+    test('Add photo cover to user by filename', async () => {
+        const event = eventContext({ body: { filename: 'duck.png' } });
         const response = await updateUser(event);
         expect(response.statusCode).toEqual(200);
     });
-    test.todo('Change user cover photo');
+    // test('Remove photo from user', async () => {
+    //     const event = eventContext({ body: { photoId: '' } });
+    //     const response = await updateUser(event);
+    //     expect(response.statusCode).toEqual(200);
+    // });
 }, TIMEOUT + 5000);
