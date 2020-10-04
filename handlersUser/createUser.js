@@ -1,17 +1,16 @@
 // called by AWS cognito post confirmation trigger
-import { handler } from "blob-common/core/handler";
 import { sanitize } from 'blob-common/core/sanitize';
 import { dbCreateItem } from "blob-common/core/dbCreate";
-import { cleanRecord } from "blob-common/core/dbClean";
 
-export const main = handler(async (event, context) => {
+export const main = async (event, context, callback) => {
     const { request } = event;
 
-    const userSub = request?.userAttributes?.sub;
+    const { userAttributes } = request;
+    const userSub = userAttributes?.sub;
 
     if (userSub) {
-        const name = request.userAttributes.name;
-        const email = request.userName;
+        const name = userAttributes['custom:name'];
+        const email = userAttributes.email;
 
         const Item = {
             PK: 'UBbase',
@@ -20,10 +19,8 @@ export const main = handler(async (event, context) => {
             email: email.toLowerCase(),
         };
 
-        const result = await dbCreateItem(Item);
-
-        return cleanRecord(result);
+        await dbCreateItem(Item);
     }
-    // if no update needed
-    return 'ok';
-});
+    // return the event to cognito
+    callback(null, event);
+};
