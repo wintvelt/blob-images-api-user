@@ -26,7 +26,7 @@ provider:
     emailIndex: email-idx
     cognitoIndex: cog-idx
     dateIndex: date-idx
-    photoBucket: blob-images
+    userPoolId: ${file(./serverlessDomainConfig.js):userPoolId.${self:provider.stage}}
 
   iamRoleStatements:
     - Effect: Allow
