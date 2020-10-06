@@ -55,6 +55,7 @@ provider:
     - Effect: Allow
       Action:
         - cognito-idp:AdminDisableUser
+        - cognito-idp:AdminDeleteUser
       Resource: "arn:aws:cognito-idp:*:*:userpool/${self:provider.environment.userPoolId}"
 
 functions:
