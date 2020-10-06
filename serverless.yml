@@ -52,6 +52,10 @@ provider:
       Action:
         - s3:getObject
       Resource: "arn:aws:s3:::*"
+    - Effect: Allow
+      Action:
+        - cognito-idp:AdminDisableUser
+      Resource: "arn:aws:cognito-idp:*:*:userpool/${self:provider.environment.userPoolId}"
 
 functions:
   createUser:
