@@ -1,5 +1,5 @@
 import { handler, getUserFromEvent } from "blob-common/core/handler";
-import { disableUser } from "blob-common/core/cognito";
+import { cognito } from "blob-common/core/cognito";
 import { dynamoDb } from "blob-common/core/db";
 
 export const main = handler(async (event, context) => {
@@ -10,6 +10,6 @@ export const main = handler(async (event, context) => {
             SK: userId
         }
     });
-    await disableUser(userId);
+    await cognito.deleteUser(userId);
     return { status: 'user deleted forever' };
 });
