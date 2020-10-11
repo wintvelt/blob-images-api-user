@@ -1,8 +1,9 @@
 import { handler, getUserFromEvent } from "blob-common/core/handler";
-import { dbUpdateMulti } from "blob-common/core/db";
+import { dbUpdateMulti, dynamoDb } from "blob-common/core/db";
 import { sanitize } from "blob-common/core/sanitize";
 
 import { getPhotoById, getPhotoByUrl } from "../libs/dynamodb-lib-single";
+import { cleanRecord } from "blob-common/core/dbClean";
 
 export const main = handler(async (event, context) => {
     const userId = getUserFromEvent(event);
@@ -32,7 +33,9 @@ export const main = handler(async (event, context) => {
         };
     };
     const hasUpdates = (Object.keys(userUpdate).length > 0);
-    if (hasUpdates) await dbUpdateMulti('UBbase', userId, userUpdate);
+    const user = (hasUpdates) ?
+        await dbUpdateMulti('UBbase', userId, userUpdate)
+        : await dynamoDb.get({ Key: { PK: 'USER', SK: userId } });
 
-    return { status: true };
+    return cleanRecord(user);
 });
