@@ -21,7 +21,8 @@ export const listGroupAlbums = async (groupId, groupRole) => {
         SK: item.SK,
         id: item.SK,
         name: item.name,
-        image: item.image,
+        photoId: item.photoId,
+        photo: item.photo,
         userIsAdmin: (groupRole === 'admin'),
         date: item.createdAt,
     }));

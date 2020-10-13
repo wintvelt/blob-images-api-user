@@ -37,5 +37,5 @@ export const main = handler(async (event, context) => {
         await dbUpdateMulti('UBbase', userId, userUpdate)
         : await dynamoDb.get({ Key: { PK: 'USER', SK: userId } });
 
-    return cleanRecord(user);
+    return cleanRecord(user.Attributes);
 });
