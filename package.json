@@ -25,6 +25,6 @@
   },
   "dependencies": {
     "blob-common": "^1.2.17",
-    "serverless": "^2.3.0"
+    "serverless": "^2.8.0"
   }
 }
