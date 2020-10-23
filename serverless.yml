@@ -105,7 +105,8 @@ functions:
     events:
       - http:
           path: /dummy
-          method: get
+          method: any
+          cors: true
   getUploadUrl:
     handler: handlersUpload/getUploadUrl.main
     events:
