@@ -21,6 +21,7 @@ provider:
 
   environment:
     photoTable: ${file(./serverlessDomainConfig.js):photoTable.${self:provider.stage}}
+    bucket: ${file(./serverlessDomainConfig.js):bucket.${self:provider.stage}}
     coverIndex: cover-idx
     photoIndex: SK-PK-idx
     emailIndex: email-idx
@@ -51,7 +52,8 @@ provider:
     - Effect: Allow
       Action:
         - s3:GetObject
-      Resource: "arn:aws:s3:::*"
+        - s3:PutObject
+      Resource: "arn:aws:s3:::${self:provider.environment.bucket}"
     - Effect: Allow
       Action:
         - cognito-idp:AdminDisableUser
@@ -104,6 +106,14 @@ functions:
       - http:
           path: /dummy
           method: get
+  getUploadUrl:
+    handler: handlersUpload/getUploadUrl.main
+    events:
+      - http:
+          path: /uploadurl
+          method: post
+          cors: true
+          authorizer: aws_iam
 
 custom:
   customDomain:
