@@ -15,7 +15,12 @@ export const getLoginUser = async (userId, cognitoId) => {
     if (!existingUser) {
         throw new Error("User not found.");
     }
-    const oldUser = { ...existingUser, photoCount: statsResult.Item?.photoCount };
+    const photoCount = statsResult.Item?.photoCount || 0;
+    const oldUser = {
+        ...existingUser,
+        photoCount,
+        mayUpload: photoCount < process.env.maxUserPhotos
+    };
 
     // update visit stats or cognitoId if needed
     const today = now();
