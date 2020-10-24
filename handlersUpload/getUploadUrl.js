@@ -24,7 +24,7 @@ export const main = handler(async (event, context) => {
 
     // check filecount
     const userStatsData = await dynamoDb.get({ Key: { PK: 'UPstats', SK: userId } });
-    const userStats = userStatsData.Attributes;
+    const userStats = userStatsData.Item;
     if (!userStats) throw new Error('user stats not found');
 
     // get metadata
