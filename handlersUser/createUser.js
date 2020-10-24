@@ -12,14 +12,22 @@ export const main = async (event, context, callback) => {
         const name = userAttributes['custom:name'];
         const email = userAttributes.email;
 
-        const Item = {
+        const UBItem = {
             PK: 'UBbase',
             SK: 'U' + userSub,
             name: sanitize(name),
             email: email.toLowerCase(),
         };
+        const UPItem = {
+            PK: 'UPstats',
+            SK: 'U' + userSub,
+            photoCount: 0
+        }
 
-        await dbCreateItem(Item);
+        await Promise.all([
+            dbCreateItem(UBItem),
+            dbCreateItem(UPItem),
+        ]);
     }
     // return the event to cognito
     callback(null, event);

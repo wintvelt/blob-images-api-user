@@ -53,6 +53,7 @@ provider:
       Action:
         - s3:GetObject
         - s3:PutObject
+        - s3:ListObjectsV2
       Resource: "arn:aws:s3:::${self:provider.environment.bucket}"
     - Effect: Allow
       Action:
