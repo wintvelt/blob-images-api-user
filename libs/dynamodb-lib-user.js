@@ -7,14 +7,17 @@ export const getLoginUser = async (userId, cognitoId) => {
         PK: 'USER',
         SK: userId,
     };
-
-    const result = await dynamoDb.get({
-        Key
-    });
-    const oldUser = result.Item;
-    if (!oldUser) {
+    const [userResult, statsResult] = await Promise.all([
+        dynamoDb.get({ Key }),
+        dynamoDb.get({ Key: { ...Key, PK: 'UPstats' } })
+    ]);
+    const existingUser = userResult.Item;
+    if (!existingUser) {
         throw new Error("User not found.");
     }
+    const oldUser = { ...existingUser, photoCount: statsResult.Item?.photoCount };
+
+    // update visit stats or cognitoId if needed
     const today = now();
     const isFirstVisit = !oldUser.visitDateLast;
     const isNewVisit = (!oldUser.visitDateLast || today > oldUser.visitDateLast);
