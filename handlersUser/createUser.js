@@ -22,7 +22,7 @@ export const main = async (event, context, callback) => {
             PK: 'UPstats',
             SK: 'U' + userSub,
             photoCount: 0
-        }
+        };
 
         await Promise.all([
             dbCreateItem(UBItem),

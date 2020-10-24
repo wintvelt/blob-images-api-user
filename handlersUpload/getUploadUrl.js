@@ -1,5 +1,6 @@
-import { handler } from "blob-common/core/handler";
+import { getUserFromEvent, handler } from "blob-common/core/handler";
 import AWS from "aws-sdk";
+import { dynamoDb } from "blob-common/core/db";
 
 var S3 = new AWS.S3({
     apiVersion: "2006-03-01",
@@ -14,20 +15,24 @@ var S3 = new AWS.S3({
 const Bucket = process.env.bucket || process.env.devBucket || 'blob-images-dev';
 
 export const main = handler(async (event, context) => {
+    const userId = getUserFromEvent(event);
     const cognitoId = event.requestContext.identity.cognitoIdentityId;
     const data = JSON.parse(event.body);
-    console.log(event);
+    console.log(data);
     const filename = data?.filename;
     if (!filename) throw new Error('no filename provided');
 
     // check filecount
-    
+    const userStatsData = await dynamoDb.get({ Key: { PK: 'UPstats', SK: userId } });
+    const userStats = userStatsData.Attributes;
+    if (!userStats) throw new Error('user stats not found');
+
     // get metadata
     const headers = data?.headers;
-    
+
     // get signed url
     const Prefix = `protected/${cognitoId}/`;
-    const Key =  Prefix + filename;
+    const Key = Prefix + filename;
     const signedUrl = await S3.getSignedUrl('putObject', {
         Bucket,
         Key,
