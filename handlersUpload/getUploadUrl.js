@@ -27,6 +27,12 @@ export const main = handler(async (event, context) => {
     const userStats = userStatsData.Item;
     if (!userStats) throw new Error('user stats not found');
 
+    const { photoCount } = userStats;
+    if (photoCount > process.env.maxUserPhotos) {
+        const message = `maximum user photos of ${process.env.maxUserPhotos} reached`;
+        throw new Error(message);
+    };
+
     // get metadata
     const headers = data?.headers;
 
