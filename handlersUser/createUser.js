@@ -2,6 +2,12 @@
 import { sanitize } from 'blob-common/core/sanitize';
 import { dbCreateItem } from "blob-common/core/dbCreate";
 
+const NUMPICS = 22;
+const randomKnor = () => {
+    return `public/img/knorren/${Math.round(Math.random() * NUMPICS)}.jpg`;
+};
+
+
 export const main = async (event, context, callback) => {
     const { request } = event;
 
@@ -17,6 +23,7 @@ export const main = async (event, context, callback) => {
             SK: 'U' + userSub,
             name: sanitize(name),
             email: email.toLowerCase(),
+            photoUrl: randomKnor()
         };
         const UPItem = {
             PK: 'UPstats',
