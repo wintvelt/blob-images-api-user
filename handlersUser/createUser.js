@@ -4,7 +4,7 @@ import { dbCreateItem } from "blob-common/core/dbCreate";
 
 const NUMPICS = 22;
 const randomKnor = () => {
-    return `public/img/knorren/${Math.round(Math.random() * NUMPICS)}.jpg`;
+    return `public/img/knorren/knor${Math.round(Math.random() * NUMPICS)}.jpg`;
 };
 
 
