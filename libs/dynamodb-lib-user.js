@@ -16,6 +16,7 @@ export const getLoginUser = async (userId, cognitoId) => {
         throw new Error("User not found.");
     }
     const photoCount = statsResult.Item?.photoCount || 0;
+    const inviteId = statsResult.Item?.inviteId;
     const oldUser = {
         ...existingUser,
         photoCount,
@@ -43,6 +44,7 @@ export const getLoginUser = async (userId, cognitoId) => {
     }
     return {
         ...oldUser,
-        ...visitUpdate
+        ...visitUpdate,
+        inviteToAccept: isFirstVisit && inviteId
     };
 };

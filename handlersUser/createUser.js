@@ -17,6 +17,7 @@ export const main = async (event, context, callback) => {
     if (userSub) {
         const name = userAttributes['custom:name'];
         const email = userAttributes.email;
+        const inviteId = userAttributes['custom:inviteId'];
 
         const UBItem = {
             PK: 'UBbase',
@@ -28,7 +29,8 @@ export const main = async (event, context, callback) => {
         const UPItem = {
             PK: 'UPstats',
             SK: 'U' + userSub,
-            photoCount: 0
+            photoCount: 0,
+            inviteId
         };
 
         await Promise.all([
