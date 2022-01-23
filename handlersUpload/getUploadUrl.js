@@ -16,7 +16,7 @@ const Bucket = process.env.bucket || process.env.devBucket || 'blob-images-dev';
 
 export const main = handler(async (event, context) => {
     const userId = getUserFromEvent(event);
-    const cognitoId = event.requestContext.identity.cognitoIdentityId;
+    // const cognitoId = event.requestContext.identity.cognitoIdentityId;
     const data = JSON.parse(event.body);
     console.log(data);
     const filename = data?.filename;
@@ -37,7 +37,8 @@ export const main = handler(async (event, context) => {
     const headers = data?.headers;
 
     // get signed url
-    const Prefix = `protected/${cognitoId}/`;
+    // const Prefix = `protected/${cognitoId}/`;
+    const Prefix = `protected/${userId}/`;
     const Key = Prefix + filename;
     const signedUrl = await S3.getSignedUrl('putObject', {
         Bucket,
