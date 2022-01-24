@@ -38,7 +38,7 @@ export const main = handler(async (event, context) => {
 
     // get signed url
     // const Prefix = `protected/${cognitoId}/`;
-    const Prefix = `protected/${userId}/`;
+    const Prefix = `protected/${userId.slice(1)}/`;
     const Key = Prefix + filename;
     const signedUrl = await S3.getSignedUrl('putObject', {
         Bucket,
