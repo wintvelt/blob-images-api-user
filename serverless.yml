@@ -1,5 +1,6 @@
 # NOTE: update this with your service name
 service: blob-images-api-user
+variablesResolutionMode: 20210326
 
 # Create an optimized package for our functions 
 package:
@@ -12,6 +13,7 @@ plugins:
   - serverless-domain-manager
 
 provider:
+  lambdaHashingVersion: '20201221'
   name: aws
   runtime: nodejs14.x
   stage: ${opt:stage, 'dev'}
