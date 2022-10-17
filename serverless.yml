@@ -1,6 +1,5 @@
 # NOTE: update this with your service name
 service: blob-images-api-user
-variablesResolutionMode: 20210326
 
 # Create an optimized package for our functions 
 package:
@@ -13,7 +12,6 @@ plugins:
   - serverless-domain-manager
 
 provider:
-  lambdaHashingVersion: '20201221'
   name: aws
   runtime: nodejs14.x
   stage: ${opt:stage, 'dev'}
@@ -31,37 +29,39 @@ provider:
     dateIndex: date-idx
     userPoolId: ${file(./serverlessDomainConfig.js):userPoolId.${self:provider.stage}}
 
-  iamRoleStatements:
-    - Effect: Allow
-      Action:
-        - dynamodb:DescribeTable
-        - dynamodb:Query
-        - dynamodb:Scan
-        - dynamodb:GetItem
-        - dynamodb:PutItem
-        - dynamodb:UpdateItem
-        - dynamodb:DeleteItem
-        - dynamodb:DescribeStream
-        - dynamodb:ListStreams
-      Resource: "arn:aws:dynamodb:eu-central-1:*:*"
-    - Effect: Allow
-      Action:
-        - ses:SendEmail
-        - ses:SendRawEmail
-        - ses:SendTemplatedEmail
-        - ses:SendBulkTemplatedEmail
-      Resource: "arn:aws:ses:eu-central-1:*:*"
-    - Effect: Allow
-      Action:
-        - s3:GetObject
-        - s3:PutObject
-        - s3:ListObjectsV2
-      Resource: "arn:aws:s3:::${self:provider.environment.bucket}"
-    - Effect: Allow
-      Action:
-        - cognito-idp:AdminDisableUser
-        - cognito-idp:AdminDeleteUser
-      Resource: "arn:aws:cognito-idp:*:*:userpool/${self:provider.environment.userPoolId}"
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action:
+            - dynamodb:DescribeTable
+            - dynamodb:Query
+            - dynamodb:Scan
+            - dynamodb:GetItem
+            - dynamodb:PutItem
+            - dynamodb:UpdateItem
+            - dynamodb:DeleteItem
+            - dynamodb:DescribeStream
+            - dynamodb:ListStreams
+          Resource: "arn:aws:dynamodb:eu-central-1:*:*"
+        - Effect: Allow
+          Action:
+            - ses:SendEmail
+            - ses:SendRawEmail
+            - ses:SendTemplatedEmail
+            - ses:SendBulkTemplatedEmail
+          Resource: "arn:aws:ses:eu-central-1:*:*"
+        - Effect: Allow
+          Action:
+            - s3:GetObject
+            - s3:PutObject
+            - s3:ListObjectsV2
+          Resource: "arn:aws:s3:::${self:provider.environment.bucket}"
+        - Effect: Allow
+          Action:
+            - cognito-idp:AdminDisableUser
+            - cognito-idp:AdminDeleteUser
+          Resource: "arn:aws:cognito-idp:*:*:userpool/${self:provider.environment.userPoolId}"
 
 functions:
   createUser:
