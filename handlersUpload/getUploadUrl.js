@@ -19,8 +19,13 @@ export const main = handler(async (event, context) => {
     // const cognitoId = event.requestContext.identity.cognitoIdentityId;
     const data = JSON.parse(event.body);
     console.log(data);
-    const filename = data?.filename;
-    if (!filename) throw new Error('no filename provided');
+    const reqFilename = data?.filename;
+    if (!reqFilename) throw new Error('no filename provided');
+    const version = data?.version || 0;
+    const now = new Date().toISOString().split('.')[0].replace(/\s|:/g, "");
+    const filename = (version === 0) ?
+        reqFilename
+        : now + '-' + reqFilename;
 
     // check filecount
     const userStatsData = await dynamoDb.get({ Key: { PK: 'UPstats', SK: userId } });
@@ -45,5 +50,7 @@ export const main = handler(async (event, context) => {
         Key,
         Metadata: headers,
     });
-    return signedUrl;
+    return (version > 1) ?
+        { filename, signedUrl }
+        : signedUrl;
 });
