@@ -95,6 +95,14 @@ functions:
           method: get
           cors: true
           authorizer: aws_iam
+  listInvites:
+    handler: handlersUser/listInvites.main
+    events:
+      - http:
+          path: /invites
+          method: get
+          cors: true
+          authorizer: aws_iam
   deleteUser:
     handler: handlersUser/deleteUser.main
     events:

@@ -48,3 +48,18 @@ export const getLoginUser = async (userId, cognitoId) => {
         inviteToAccept: isFirstVisit && inviteId
     };
 };
+
+export const getUser = async (userId) => {
+    const params = {
+        Key: {
+            PK: 'USER',
+            SK: userId,
+        }
+    };
+    const result = await dynamoDb.get(params);
+    const oldUser = result.Item;
+    if (!oldUser) {
+        throw new Error("User not found.");
+    }
+    return oldUser;
+};
