@@ -1,4 +1,4 @@
-// called by AWS cognito post confirmation trigger
+// called by AWS cognito post confirmation trigger = after validating email
 // NB: this happens at signup, but also after forgotpassword flow
 import { sanitize } from 'blob-common/core/sanitize';
 import { dbCreateItem } from "blob-common/core/dbCreate";
